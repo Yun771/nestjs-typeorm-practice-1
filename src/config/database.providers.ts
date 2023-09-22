@@ -1,5 +1,5 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { User } from 'src/entities';
+import { UserEntity, TodoEntity } from 'src/entities';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
@@ -14,9 +14,10 @@ export const databaseProviders = [
         username: configService.get('db.user'),
         password: configService.get('db.password'),
         database: configService.get('db.database'),
-        entities: [User],
+        entities: [UserEntity, TodoEntity],
         synchronize: true,
         uuidExtension: 'pgcrypto',
+        logging: configService.get('is_dev'),
       });
 
       return dataSource.initialize();

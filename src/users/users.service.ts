@@ -1,18 +1,19 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { User } from 'src/entities';
+import { UserEntity } from 'src/entities';
 import { Repository } from 'typeorm';
 import { CreatedUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { PostgresErrorCode } from 'src/utils/error-code-db';
+import { LoginDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
-    private userRepository: Repository<User>,
+    private userRepository: Repository<UserEntity>,
   ) {}
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserEntity[]> {
     return await this.userRepository.find();
   }
 
@@ -33,8 +34,6 @@ export class UsersService {
       };
     } catch (error) {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
-        console.log('asdasdsadsadassdasd<');
-
         throw new HttpException(
           {
             status: HttpStatus.BAD_REQUEST,
@@ -48,5 +47,50 @@ export class UsersService {
       }
       throw new Error('Something went wrong');
     }
+  }
+
+  async findByEmailAndPassword(login: LoginDto): Promise<UserEntity> {
+    const users = await this.userRepository.find({
+      select: {
+        email: true,
+        password: true,
+        name: true,
+        lastName: true,
+      },
+      where: {
+        email: login.email,
+      },
+    });
+
+    const [user] = users;
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Email or password is invalid',
+        },
+        HttpStatus.NOT_FOUND,
+        {
+          cause: 'Email or password is invalid',
+        },
+      );
+    }
+
+    const passwordMatched = await bcrypt.compare(login.password, user.password);
+
+    if (!passwordMatched) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Password wrong!',
+        },
+        HttpStatus.NOT_FOUND,
+        {
+          cause: 'Password wrong!',
+        },
+      );
+    }
+    return user;
   }
 }

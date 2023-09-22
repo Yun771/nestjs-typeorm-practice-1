@@ -2,12 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { TodoEntity } from 'src/entities';
 
 @Entity('users')
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -32,12 +34,9 @@ export class User {
   @UpdateDateColumn()
   updated: Date;
 
-  @Column({ name: 'created_by', default: ' ' })
-  createdBy: string;
-
-  @Column({ name: 'update_by', default: ' ' })
-  updateBy: string;
-
-  @Column()
+  @Column({ select: false })
   password: string;
+
+  @OneToMany(() => TodoEntity, (todo) => todo.user)
+  todos: TodoEntity[];
 }
