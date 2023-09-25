@@ -3,8 +3,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -22,6 +24,9 @@ export class TodoEntity {
   @Column()
   status: string;
 
+  @Column({ default: false })
+  completed: boolean;
+
   @CreateDateColumn()
   created: Date;
 
@@ -29,5 +34,10 @@ export class TodoEntity {
   updated: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.todos)
+  @JoinColumn()
   user: UserEntity;
+
+  @Column()
+  @RelationId((todo: TodoEntity) => todo.user)
+  userId: string;
 }

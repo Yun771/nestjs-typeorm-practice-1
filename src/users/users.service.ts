@@ -52,9 +52,11 @@ export class UsersService {
   async findByEmailAndPassword(login: LoginDto): Promise<UserEntity> {
     const users = await this.userRepository.find({
       select: {
+        id: true,
         email: true,
         password: true,
         name: true,
+        username: true,
         lastName: true,
       },
       where: {
