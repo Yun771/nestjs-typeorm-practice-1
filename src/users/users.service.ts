@@ -3,7 +3,7 @@ import { UserEntity } from 'src/entities';
 import { Repository } from 'typeorm';
 import { CreatedUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { PostgresErrorCode } from 'src/utils/error-code-db';
+import { PostgresErrorCode } from 'src/utils/error-code-db.utils';
 import { LoginDto } from './dto/login-user.dto';
 
 @Injectable()
