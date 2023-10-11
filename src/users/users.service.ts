@@ -22,7 +22,7 @@ export class UsersService {
       const { password } = userDto;
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(password, salt);
-      const user = await this.userRepository.create(userDto);
+      const user = this.userRepository.create(userDto);
 
       user.password = hashedPassword;
 

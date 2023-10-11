@@ -13,8 +13,4 @@ export class CreatedUserDto {
   email: string;
   @ApiProperty({ type: Number })
   age: number;
-  @ApiProperty()
-  createdBy: string;
-  @ApiProperty()
-  updateBy: string;
 }

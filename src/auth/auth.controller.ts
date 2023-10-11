@@ -8,8 +8,14 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @Post()
+  @Post('login')
   async login(@Body() login: LoginDto) {
-    return this.authService.login(login);
+    const user = await this.userService.findByEmailAndPassword(login);
+
+    const payload: PayloadToken = { sub: user.id, username: user.username };
+
+    return {
+      accessToken: await this.jwtService.signAsync(payload),
+    };
   }
 }

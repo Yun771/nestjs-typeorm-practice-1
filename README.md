@@ -24,6 +24,19 @@
 
 ## Description
 
+### Getting Start
+
+create a .env and create the next variables:
+  - POSTGRES_HOST=\<host>
+  - POSTGRES_PORT=\<port db>
+  - POSTGRES_USER=\<your username>
+  - POSTGRES_PASSWORD=\<your password>
+  - POSTGRES_DATABASE=\<database name>
+  - PORT=\<port server>
+  - MODE=DEV
+  - SECRET_KEY=\<secret key for jwt token>
+
+
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
