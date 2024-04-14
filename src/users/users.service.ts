@@ -27,6 +27,7 @@ export class UsersService {
       user.password = hashedPassword;
 
       const userSaved = await this.userRepository.save(user);
+      userSaved.password = undefined;
 
       return {
         success: true,
